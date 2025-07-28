@@ -6,8 +6,13 @@
   <title>Portfolio Intro</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+
+    body {
       background-color: rgb(22, 22, 22);
       height: 100vh;
       display: flex;
@@ -19,23 +24,24 @@
     .text-wrapper {
       position: relative;
       display: inline-block;
-      animation: fadeOut 1.5s ease-in-out 2.2s forwards; /* fade after curtain */
+      animation: fadeOut 1.5s ease-in-out 2.2s forwards;
     }
 
     .text {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 18rem;
+      font-size: 18vw;
       transform: scaleY(1.4);
-      letter-spacing: 5px;
+      letter-spacing: 0.5vw;
       background: url("bg1.png") no-repeat center center;
       background-size: cover;
       color: transparent;
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-stroke: 1px white;
-      z-index: 1;
       position: relative;
       text-transform: uppercase;
+      z-index: 1;
+      white-space: nowrap;
     }
 
     .mask-left, .mask-right {
@@ -71,6 +77,23 @@
       0% { opacity: 1; }
       100% { opacity: 0; }
     }
+
+    /* Media Queries for smaller devices */
+    @media (max-width: 768px) {
+      .text {
+        font-size: 22vw;
+        -webkit-text-stroke: 0.5px white;
+        letter-spacing: 1vw;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .text {
+        font-size: 24vw;
+        -webkit-text-stroke: 0.4px white;
+        letter-spacing: 1.5vw;
+      }
+    }
   </style>
 </head>
 <body>
@@ -79,10 +102,11 @@
     <div class="mask-left"></div>
     <div class="mask-right"></div>
   </div>
+
   <script>
-  setTimeout(() => {
-    window.location.href = "name.html"; // redirect after 3 seconds
-  }, 4000);
-</script>
+    setTimeout(() => {
+      window.location.href = "name.html"; // redirect after animation
+    }, 4000);
+  </script>
 </body>
 </html>
