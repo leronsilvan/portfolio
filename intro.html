@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Intro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: rgb(22, 22, 22);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .text-wrapper {
+      position: relative;
+      display: inline-block;
+      animation: fadeOut 1.5s ease-in-out 2.2s forwards; /* fade after curtain */
+    }
+
+    .text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18rem;
+      transform: scaleY(1.4);
+      letter-spacing: 5px;
+      background: url("bg1.png") no-repeat center center;
+      background-size: cover;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-stroke: 1px white;
+      z-index: 1;
+      position: relative;
+      text-transform: uppercase;
+    }
+
+    .mask-left, .mask-right {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      background-color: rgb(22, 22, 22);
+      z-index: 2;
+    }
+
+    .mask-left {
+      left: 0;
+      animation: openLeft 2s ease-in-out forwards;
+    }
+
+    .mask-right {
+      right: 0;
+      animation: openRight 2s ease-in-out forwards;
+    }
+
+    @keyframes openLeft {
+      0% { left: 0; width: 50%; }
+      100% { left: 0; width: 0%; }
+    }
+
+    @keyframes openRight {
+      0% { right: 0; width: 50%; }
+      100% { right: 0; width: 0%; }
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="text-wrapper">
+    <div class="text">PORTFOLIO</div>
+    <div class="mask-left"></div>
+    <div class="mask-right"></div>
+  </div>
+  <script>
+  setTimeout(() => {
+    window.location.href = "../HOMEANIME/name.html"; // redirect after 3 seconds
+  }, 4000);
+</script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Horizontal Section Slider</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #111;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+    h1, p {
+  font-family: 'Poppins', sans-serif;
+}
+    .wrapper {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slider {
+      display: flex;
+      width: 200vw;
+      height: 100vh;
+      transition: transform 0.8s ease;
+    }
+
+    .row {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .section {
+      flex: 1;
+      border-radius: 8px;
+      background: #333;
+      position: relative;
+      overflow: hidden;
+      opacity: 0.6;
+      transition: opacity 0.5s ease, flex 1s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section:hover {
+      opacity: 1;
+    }
+
+    .image-slide {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      animation: slideUp 1s ease forwards;
+    }
+
+    .slider .row:nth-child(1) .section:nth-child(1) .image-slide { background-image: url('6.jpg'); animation-delay: 0s; }
+    .slider .row:nth-child(1) .section:nth-child(2) .image-slide { background-image: url('2.jpg'); animation-delay: 0.2s; }
+    .slider .row:nth-child(1) .section:nth-child(3) .image-slide { background-image: url('3.jpg'); animation-delay: 0.4s; }
+    .slider .row:nth-child(1) .section:nth-child(4) .image-slide { background-image: url('12.jpeg'); animation-delay: 0.6s; }
+
+    .slider .row:nth-child(2) .section:nth-child(1) .image-slide { background-image: url('9.jpeg'); animation-delay: 0.8s; }
+    .slider .row:nth-child(2) .section:nth-child(2) .image-slide { background-image: url('10.jpg'); animation-delay: 1s; }
+    .slider .row:nth-child(2) .section:nth-child(3) .image-slide { background-image: url('11.jpg'); animation-delay: 1.2s; }
+    .slider .row:nth-child(2) .section:nth-child(4) .image-slide { background-image: url('8.jpg'); animation-delay: 1.4s; }
+
+    @keyframes slideUp {
+      from { bottom: -100%; }
+      to { bottom: 0; }
+    }
+
+    .hover-text {
+      font-family: 'Poppins', sans-serif;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .section:hover .hover-text {
+      opacity: 1;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.3s ease;
+    }
+
+    .arrow:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    #arrowRight {
+      right: 20px;
+    }
+
+    #arrowLeft {
+      left: 20px;
+      display: none;
+    }
+
+    .fade-out {
+      opacity: 0 !important;
+      flex: 0 !important;
+      transition: opacity 0.5s ease, flex 1s ease;
+    }
+
+    .expand {
+      flex: 10 !important;
+      opacity: 1 !important;
+      transition: flex 1s ease, opacity 0.5s ease;
+    }
+
+    #closeBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      font-size: 30px;
+      color: white;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+    }
+
+    #closeBtn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .section-content {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: rgba(255, 255, 255, 0.73);
+      z-index: 3;
+      opacity: 0;
+      max-width: 100%;
+      transition: opacity 0.6s ease;
+      display: none;
+      flex-direction: column;
+      gap: 0.8rem;
+      text-align: left;
+    }
+
+    .section-content.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .section-content-buttons {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: none;
+      gap: 10px;
+      z-index: 3;
+    }
+
+    .section-content-buttons.show {
+      display: flex;
+    }
+
+    .section-content-buttons button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .section-content-buttons button:hover {
+      background: rgba(255,255,255,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <div class="slider" id="slider">
+      <!-- 2 Rows -->
+      <div class="row">
+        <!-- Sections 1-4 -->
+        <div class="section" onclick="expandSection(this)">
+          <div class="image-slide"></div>
+          <div class="hover-text">Car Price Predictor</div>
+          <div class="section-content">
+            <h1>Car Price Predictor</h1>
+            <p style="font-size: 18px;"><br>Predicts the resale price of a car based on specifications such as brand, year, fuel type, and mileage.
+              <br>Uses Linear Regression after proper encoding and preprocessing.<br>
+              <br>•	Built with: Python, Streamlit, scikit-learn, pandas
+              <br>•	Input: Car brand, year, fuel type, kilometers driven, etc.
+              <br>•	Output: Estimated resale price
+              <br>•	Use Case: Helps users get fair resale value for their vehicles.
+</p>
+          </div>
+          <div class="section-content-buttons">
+            <button onclick="window.open('https://car-value-predictor-am85qmqk2wodn7au7bo5wt.streamlit.app/', '_blank')">Demo</button>
+            <button onclick="window.open('https://github.com/leronsilvan/CAR-VALUE-PREDICTOR', '_blank')">Repo</button>
+          </div>
+        </div>
+        <!-- Repeat same for Section 2,3,4 -->
+        <div class="section" onclick="expandSection(this)">
+          <div class="image-slide"></div>
+          <div class="hover-text">Stock Price Predictor</div>
+          <div class="section-content">
+            <h1>Stock Price Predictor</h1>
+            <p style="font-size: 18px;"><br>Forecasts the next day’s stock price using a sliding window approach with Linear Regression.<br>
+              <br>•	Built with: Python, Streamlit, yfinance, scikit-learn
+              <br>•	Input: Stock symbol and date range
+              <br>•	Output: Predicted closing price
+              <br>•	Use Case: Helps users make informed trading decisions.</p>
+          </div>
+          <div class="section-content-buttons">
+            <button onclick="window.open('https://stock-predictor-paq3cnhxssfkih88q6hj9g.streamlit.app/', '_blank')">Demo</button>
+            <button onclick="window.open('https://github.com/leronsilvan/STOCK-PREDICTOR', '_blank')">Repo</button>
+          </div>
+        </div>
+        <div class="section" onclick="expandSection(this)">
+          <div class="image-slide"></div>
+          <div class="hover-text">Loan Approval Classifier</div>
+          <div class="section-content">
+            <h1>Loan Approval Classifier</h1>
+            <p style="font-size: 18px;"><br>Predicts whether a loan application will be approved based on applicant financial and background data.<br>
+            Implements a classification model trained on real-world-like features.<br>
+	          <br>•	Built with: Python, Streamlit, scikit-learn
+	          <br>•	Input: Income, CIBIL score, employment, loan amount, assets
+	          <br>•	Output: Approved / Rejected
+	          <br>•	Use Case: Early screening for loan eligibility.</p>
+          </div>
+          <div class="section-content-buttons">
+            <button onclick="window.open('https://loan-approval-predictor-52dm2ti47edgaqcz2mauef.streamlit.app/', '_blank')">Demo</button>
+<button onclick="window.open('https://github.com/leronsilvan/LOAN-APPROVAL-PREDICTOR', '_blank')">Repo</button>
+          </div>
+        </div>
+        <div class="section" onclick="expandSection(this)">
+          <div class="image-slide"></div>
+          <div class="hover-text">Scholarship Eligibility </div>
+          <div class="section-content">
+            <h1>Scholarship Eligibility Classifier</h1>
+            <p style="font-size: 18px;"><br>Predicts whether a student is eligible for a scholarship based on personal and academic features.<br>
+                It uses K-Nearest Neighbors (KNN) for classification.<br><br>
+	                •	Built with: Python, Streamlit, scikit-learn<br>
+	                •	Features: Categorical + numerical student data<br>
+	                •	Output: Eligible or Not Eligible<br>
+	                •	Use Case: Helps in pre-screening scholarship applicants.</p>
+          </div>
+          <div class="section-content-buttons">
+            <button onclick="window.open('https://2hnrmdfxfxidrlvtujjxfr.streamlit.app/', '_blank')">Demo</button>
+            <button onclick="window.open('https://github.com/leronsilvan/SCHOLARSHIP-ELIGIBILTY-PREDICTOR-', '_blank')">Repo</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Sections 1-4 -->
+        <div class="section" onclick="expandSection(this)">
+          <div class="image-slide"></div>
+          <div class="hover-text">Savings Predictor</div>
+          <div class="section-content">
+            <h1>Savings Predictor</h1>
+            <p style="font-size: 18px;"><br>Estimates a user’s desired monthly savings based on financial profile and lifestyle.<br>
+              Uses a Random Forest Regressor wrapped in a pipeline with preprocessing.<br><br>
+	            •	Built with: Python, Streamlit, scikit-learn<br>
+	            •	Input: Occupation, city tier, income, spending<br>
+	            •	Output: Predicted savings amount<br>
+	            •	Use Case: Personalized financial planning aid.</p>
+          </div>
+          <div class="section-content-buttons">
+            <button onclick="window.open('https://savings-predictor-8vclavpa2afjuzslcw5r3p.streamlit.app/', '_blank')">Demo</button>
+            <button onclick="window.open('https://github.com/leronsilvan/SAVINGS-PREDICTOR', '_blank')">Repo</button>
+          </div>
+        </div>
+        <!-- Repeat same for Section 2,3,4 -->
+        <div class="section" onclick="expandSection(this)">
+          <div class="image-slide"></div>
+          <div class="hover-text">Sales Forecasting</div>
+          <div class="section-content">
+            <h1>Sales Forecasting</h1>
+            <p style="font-size: 18px;"><br>Forecasts future retail sales based on historical data using time series modeling.<br>
+              Trained with models like Linear Regression / Random Forest using date and sales trends.<br>
+              <br>•	Built with: Python, Streamlit, pandas, scikit-learn
+              <br>•	Input: Sales data over time
+              <br>•	Output: Forecasted future sales
+              <br>•	Use Case: Helps businesses plan inventory and budgeting.</p>
+          </div>
+          <div class="section-content-buttons">
+            <button onclick="window.open('https://sales-forecasting-exlbukaobnzwdkius5wlzf.streamlit.app/', '_blank')">Demo</button>
+            <button onclick="window.open('https://github.com/leronsilvan/SALES-FORECASTING', '_blank')">Repo</button>
+          </div>
+        </div>
+        <div class="section" onclick="expandSection(this)">
+          <div class="image-slide"></div>
+          <div class="hover-text">Image Compressor</div>
+          <div class="section-content">
+            <h1>Image Compressor</h1>
+            <p style="font-size: 18px;"><br>Compresses images using K-Means clustering to reduce the number of colors while preserving visual quality.<br>
+	            <br>•	Built with: Python, Streamlit, OpenCV, scikit-learn
+	            <br>•	Input: Image file
+	            <br>•	Output: Compressed image
+	            <br>•	Use Case: Reduces image size for web apps and storage.</p>
+          </div>
+          <div class="section-content-buttons">
+            <button onclick="window.open('https://image-compreappr-6fpjrhm23ysndgosbahcsi.streamlit.app/', '_blank')">Demo</button>
+            <button onclick="window.open('https://github.com/leronsilvan/IMAGE-COMPRESSOR', '_blank')">Repo</button>
+          </div>
+        </div>
+        <div class="section" onclick="expandSection(this)">
+          <div class="image-slide"></div>
+          <div class="hover-text">Audio Genre Predictor</div>
+          <div class="section-content">
+            <h1>Audio Genre Predictor</h1>
+            <p style="font-size: 18px;"><br>This project classifies songs into genres based on extracted audio features using unsupervised learning (KMeans Clustering).<br>
+	          <br>•	Built with: Python, Streamlit, librosa, scikit-learn
+	          <br>•	Input: .mp3 or .wav audio file
+            <br>•	Output: Predicted genre cluster
+	          <br>•	Use Case: Helps categorize music automatically using audio characteristics like tempo, rhythm, and spectral features.</p>
+          </div>
+          <div class="section-content-buttons">
+            <button onclick="window.open('https://song-genre-prediction-x7azw536qxzjusnoukhhng.streamlit.app/', '_blank')">Demo</button>
+            <button onclick="window.open('https://github.com/leronsilvan/SONG-GENRE-PREDICTION', '_blank')">Repo</button>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div class="arrow" id="arrowLeft" onclick="slideLeft()">&#8249;</div>
+    <div class="arrow" id="arrowRight" onclick="slideRight()">&#8250;</div>
+
+    <div id="closeBtn" onclick="resetSections()">&#10005;</div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+
+    function slideRight() {
+      document.getElementById('slider').style.transform = `translateX(-100vw)`;
+      document.getElementById('arrowRight').style.display = 'none';
+      document.getElementById('arrowLeft').style.display = 'flex';
+      currentSlide = 1;
+    }
+
+    function slideLeft() {
+      document.getElementById('slider').style.transform = `translateX(0vw)`;
+      document.getElementById('arrowLeft').style.display = 'none';
+      document.getElementById('arrowRight').style.display = 'flex';
+      currentSlide = 0;
+    }
+
+    function expandSection(clickedSection) {
+      const allSections = document.querySelectorAll('.section');
+      allSections.forEach(section => {
+        const hoverText = section.querySelector('.hover-text');
+        const content = section.querySelector('.section-content');
+        const buttons = section.querySelector('.section-content-buttons');
+        if (section !== clickedSection) {
+          section.classList.add('fade-out');
+        } else {
+          hoverText.style.transition = 'opacity 0.4s ease';
+          hoverText.style.opacity = '0';
+          setTimeout(() => {
+            hoverText.style.display = 'none';
+            content.classList.add('show');
+            buttons.classList.add('show');
+          }, 1000);
+        }
+      });
+
+      document.getElementById('arrowLeft').style.display = 'none';
+      document.getElementById('arrowRight').style.display = 'none';
+
+      setTimeout(() => {
+        clickedSection.classList.add('expand');
+        document.getElementById('closeBtn').style.display = 'flex';
+      }, 300);
+    }
+
+    function resetSections() {
+      const allSections = document.querySelectorAll('.section');
+      allSections.forEach(section => {
+        section.classList.remove('fade-out', 'expand');
+        const hoverText = section.querySelector('.hover-text');
+        const content = section.querySelector('.section-content');
+        const buttons = section.querySelector('.section-content-buttons');
+        hoverText.style.display = 'block';
+        hoverText.style.opacity = '0';
+        setTimeout(() => { hoverText.style.opacity = '1'; }, 10);
+        content.classList.remove('show');
+        buttons.classList.remove('show');
+      });
+
+      document.getElementById('closeBtn').style.display = 'none';
+
+      if (currentSlide === 0) {
+        document.getElementById('arrowRight').style.display = 'flex';
+      } else {
+        document.getElementById('arrowLeft').style.display = 'flex';
+      }
+    }
+  </script>
+
+</body>
+</html>
