@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Typing Animation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: rgb(22, 22, 22);
+      font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #typing-text {
+      font-size: 3rem;
+      white-space: nowrap;
+      border-right: 3px solid rgb(255, 255, 255);
+      z-index: 999;
+      overflow: hidden;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+    }
+
+    .name-image-wrapper {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+    }
+
+    #name {
+      font-size: 5rem;
+      font-weight: bold;
+      position: absolute;
+      top: 20%;
+      left: 5%;
+      opacity: 0;
+      transform: translateY(-100px);
+      transition: opacity 1s ease, transform 1s ease;
+      text-align: left;
+      z-index: 10;
+      color: white;
+    }
+
+    #name.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #subtitle {
+      font-size: 2rem;
+      position: absolute;
+      top: 32%;
+      left: 5%;
+      opacity: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid white;
+      color: white;
+    }
+
+    .title-role {
+      font-size: 7.2rem;
+      font-weight: bold;
+      color: #00f0ff;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+      position: absolute;
+      top: 37%;
+      left: 5%;
+    }
+
+    .title-role.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .bio {
+      font-size: 1.4rem;
+      color: #ccc;
+      position: absolute;
+      top: 53%;
+      left: 5%;
+      max-width: 600px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .bio.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .download-btn {
+      position: absolute;
+      top: 70%;
+      left: 5%;
+      background-color: #00f0ff;
+      color: rgb(0, 0, 0);
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+      text-decoration: none;
+    }
+
+    .download-btn:hover {
+      background-color: #63c8ff;
+    }
+
+    .download-btn.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #image {
+      width: 375px;
+      height: auto;
+      position: fixed;
+      bottom: 0%;
+      right: 2%;
+      opacity: 0;
+      transform: translateY(100px);
+      transition: opacity 1s ease, transform 1s ease;
+      z-index: 9;
+    }
+
+    #image.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .scroll-hint.show {
+      opacity: 1;
+    }
+
+    .arrows {
+      margin-top: 5px;
+    }
+
+    .arrow {
+      font-size: 1.5rem;
+      animation: bounce 1.5s infinite;
+    }
+
+    .arrow:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translateY(5px);
+        opacity: 1;
+      }
+    }
+
+    .about-section {
+      padding: 100px 50px;
+      background: #111;
+      min-height: 80vh;
+    }
+
+    .about-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #00f0ff;
+    }
+
+    .about-section p {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: auto;
+      color: #ccc;
+    }
+
+    .education-section {
+      padding: 50px 20px;
+      background: #111;
+      color: #00f0ff;
+      text-align: center;
+    }
+
+    .education-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .edu-accordion {
+      font-family: 'Nunito', sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .edu-item {
+      font-family: 'Nunito', sans-serif;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      border-left: 5px solid #00f0ff;
+    }
+
+    .edu-toggle {
+      font-family: 'Nunito', sans-serif;
+      width: 100%;
+      background: #222;
+      color: #ffffff;
+      border: none;
+      padding: 15px;
+      font-size: 1.1rem;
+      text-align: left;
+      cursor: pointer;
+      outline: none;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .edu-content {
+      position: relative;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.5s ease;
+      color: white;
+    }
+
+    .edu-content::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+      z-index: 1;
+    }
+
+    .edu-content p {
+      position: relative;
+      z-index: 2;
+      margin: 70px 0;
+      padding: 0 15px;
+    }
+
+    .edu-sjec {
+      background-image: url('sjec.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .edu-sapuc {
+      background-image: url('sapuc.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .edu-mccs {
+      background-image: url('mccs.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .skills-section {
+      padding: 100px 50px;
+      background: #111;
+      color: #00f0ff;
+    }
+    .skills-section h2 {
+      
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
+      margin-top: 40px;
+    }
+
+    .skill {
+      color:white;
+      font-family: 'Nunito', sans-serif;
+      background: #1f1f1f;
+      padding: 15px 25px;
+      border-radius: 12px;
+      font-size: 1rem;
+      border: 1px solid #333;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+    
+
+    #view-projects-section {
+      text-align: center;
+      padding: 80px 20px;
+      background: #111;
+      color: white;
+    }
+
+    .view-projects-btn {
+      background-color: #00f0ff;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .view-projects-btn:hover {
+      background-color: #63c8ff;
+    }
+
+    .contact-section {
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 50px;
+}
+
+.contact-section h2 {
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.contact-icons a img {
+  width: 40px;
+  height: 40px;
+  filter: invert(100%); /* Makes logos white for dark background */
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.contact-icons a:hover img {
+  transform: scale(1.2);
+  filter: invert(60%) sepia(100%) saturate(300%) hue-rotate(190deg); /* Neon-like hover */
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="typing-text"></div>
+    <div class="name-image-wrapper">
+      <div id="name">Leron Silvan Lasrado</div>
+      <div id="subtitle"></div>
+      <div class="title-role" id="title-role">DATA SCIENTIST</div>
+      <div class="bio" id="bio">Focused on turning raw data into powerful insights.</div>
+      <a class="download-btn" id="downloadBtn" href="LeronSilvanCV.pdf" download>Download CV</a>
+      <img id="image" src="ll.png" alt="Profile Image" />
+    </div>
+    <div class="scroll-hint" id="scrollHint">
+      <span>Scroll down to view more</span>
+      <div class="arrows">
+        <div class="arrow">↓</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-section">
+    <h2>About Me</h2>
+    <p>Hello! I’m a passionate and driven data science enthusiast with a strong foundation in Python, machine learning, and real-world problem-solving. With a background in both theoretical knowledge and practical implementation, I specialize in turning raw data into meaningful insights and building intelligent systems that make a difference.<br><br>
+      Over the past year, I’ve built multiple end-to-end projects ranging from regression-based prediction models (like car price prediction and savings forecasting) to classification models (like loan approval prediction), and even time series forecasting (like stock and retail sales predictions). Each project has helped me deepen my understanding of the full data science lifecycle — from data collection and preprocessing, to model training, evaluation, and deployment with tools like Streamlit.<br><br>
+      I’m constantly learning and exploring new technologies, and I aim to blend analytical thinking with creativity.</p>
+  </div>
+
+  <section id="education" class="education-section">
+    <h2>Education</h2>
+    <div class="edu-accordion">
+      <div class="edu-item">
+        <button class="edu-toggle">Bachelor of Computer Science And Business Systems</button>
+        <div class="edu-content edu-sjec">
+          <p>St. Joseph Engineering College, 2022 – 2026</p>
+          <p>CGPA: 8.19 / 10</p>
+        </div>
+      </div>
+
+      <div class="edu-item">
+        <button class="edu-toggle">Higher Secondary Schooling (12th Grade)</button>
+        <div class="edu-content edu-sapuc">
+          <p>St. Aloysius PU College, 2020 – 2022</p>
+          <p>Percentage: 89.16</p>
+        </div>
+      </div>
+
+      <div class="edu-item">
+        <button class="edu-toggle">Secondary Schooling (10th Grade)</button>
+        <div class="edu-content edu-mccs">
+          <p>Mount Carmel Central School, 2010 – 2020</p>
+          <p>Percentage: 81.6</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="skills-section">
+    <h2>Skills</h2>
+    <div class="skills-grid">
+      <div class="skill">Python</div>
+      <div class="skill">Pandas</div>
+      <div class="skill">NumPy</div>
+      <div class="skill">Matplotlib</div>
+      <div class="skill">Seaborn</div>
+      <div class="skill">Scikit-Learn</div>
+      <div class="skill">SQL</div>
+      <div class="skill">Data Wrangling</div>
+      <div class="skill">Machine Learning</div>
+      <div class="skill">Time Series Analysis</div>
+    </div>
+  </div>
+
+  <section id="view-projects-section">
+    <h2>Ready to Explore?</h2>
+    <p>Check out some of the exciting projects I've worked on.</p>
+    <a href="../PROJECT LINK/index.html" class="view-projects-btn">View Projects</a>
+  </section>
+
+  <!-- Contact Me Section -->
+<section id="contact" class="contact-section">
+  <h2>Contact Me</h2>
+  <div class="contact-icons">
+    <a href="https://www.instagram.com/_lllleronllll_" target="_blank" title="Instagram">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram">
+    </a>
+    <a href="https://www.linkedin.com/in/leron-lasrado-098b14366" target="_blank" title="LinkedIn">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="LinkedIn">
+    </a>
+    <a href="mailto:leronsilvan7@gmail.com" title="Email">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/gmail.svg" alt="Email">
+    </a>
+    <a href="https://wa.me/918618816701" target="_blank" title="WhatsApp">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="WhatsApp">
+    </a>
+    <a href="https://github.com/leronsilvan" target="_blank" title="GitHub">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub">
+    </a>
+  </div>
+</section>
+
+  <script>
+    const toggles = document.querySelectorAll('.edu-toggle');
+    toggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const content = toggle.nextElementSibling;
+        const isOpen = content.style.maxHeight;
+        document.querySelectorAll('.edu-content').forEach(c => {
+          c.style.maxHeight = null;
+          c.style.paddingBottom = 0;
+        });
+        if (!isOpen || isOpen === '0px') {
+          content.style.maxHeight = content.scrollHeight + "px";
+          content.style.paddingBottom = "15px";
+        }
+      });
+    });
+
+    // Intro Typing Animation
+    const textElement = document.getElementById("typing-text");
+    const nameElement = document.getElementById("name");
+    const imageElement = document.getElementById("image");
+    const subtitleElement = document.getElementById("subtitle");
+    const roleElement = document.getElementById("title-role");
+    const bioElement = document.getElementById("bio");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const scrollHint = document.getElementById("scrollHint");
+
+    const fullText = "Hey.. and welcome.";
+    const nextText = "My name is..";
+    const subtitleText = "I am a";
+
+    function typeWriter(text, callback) {
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          textElement.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, 80);
+        } else {
+          setTimeout(callback, 500);
+        }
+      }
+      type();
+    }
+
+    function eraseText(callback) {
+      let i = textElement.textContent.length;
+      function erase() {
+        if (i >= 0) {
+          textElement.textContent = textElement.textContent.slice(0, i);
+          i--;
+          setTimeout(erase, 40);
+        } else {
+          setTimeout(callback, 500);
+        }
+      }
+      erase();
+    }
+
+    function typeSubtitle(text, callback) {
+      let i = 0;
+      subtitleElement.style.opacity = 1;
+      function type() {
+        if (i < text.length) {
+          subtitleElement.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, 100);
+        } else {
+          subtitleElement.style.borderRight = "none";
+          setTimeout(() => {
+            roleElement.classList.add("show");
+            setTimeout(() => {
+              bioElement.classList.add("show");
+              setTimeout(() => {
+                downloadBtn.classList.add("show");
+                setTimeout(() => {
+                  scrollHint.classList.add("show");
+                  document.body.style.overflow = 'auto';
+                  if (callback) callback();
+                }, 800);
+              }, 800);
+            }, 800);
+          }, 500);
+        }
+      }
+      type();
+    }
+
+    function revealElements() {
+      nameElement.classList.add("show");
+      imageElement.classList.add("show");
+      setTimeout(() => {
+        typeSubtitle(subtitleText);
+      }, 1000);
+    }
+
+    function revealImmediately() {
+      nameElement.classList.add("show");
+      imageElement.classList.add("show");
+      subtitleElement.style.opacity = 1;
+      subtitleElement.textContent = subtitleText;
+      subtitleElement.style.borderRight = "none";
+      roleElement.classList.add("show");
+      bioElement.classList.add("show");
+      downloadBtn.classList.add("show");
+      scrollHint.classList.add("show");
+      document.body.style.overflow = 'auto';
+    }
+
+    const seen = sessionStorage.getItem("hasSeenAnimation");
+    if (!seen) {
+      sessionStorage.setItem("hasSeenAnimation", "true");
+      typeWriter(fullText, () => {
+        eraseText(() => {
+          typeWriter(nextText, () => {
+            eraseText(() => {
+              revealElements();
+            });
+          });
+        });
+      });
+    } else {
+      revealImmediately();
+    }
+  </script>
+</body>
+</html>
